@@ -4,14 +4,17 @@ from PIL import Image
 import os
 from pgpyui import textarea, button
 
+
 # --- Interfaces ---
 class IQRCodeGenerator:
     def generate(self, text: str) -> Image.Image | None:
         raise NotImplementedError
 
+
 class IQRCodeSaver:
     def save(self, img: Image.Image, filename: str) -> None:
         raise NotImplementedError
+
 
 # --- Implementations ---
 class QRCodeGenerator(IQRCodeGenerator):
@@ -33,6 +36,7 @@ class QRCodeGenerator(IQRCodeGenerator):
         except Exception as e:
             print(f"Error generating QR code: {e}")
             return None
+
 
 class QRCodeSaver(IQRCodeSaver):
     def save(self, img: Image.Image, filename: str) -> None:
@@ -63,9 +67,15 @@ class QRCodeApp:
 
     def init_ui(self):
         self.text_area = textarea.TextArea((50, 50), (300, 200), 20, 1000)
-        self.generate_button = button.Button((50, 270), (300, 40), "Generate QR", self.generate_qr, [])
-        self.save_button = button.Button((50, 330), (300, 40), "Save QR", self.save_qr, [])
-        self.clear_button = button.Button((50, 390), (300, 40), "Clear QR", self.clear_qr, [])
+        self.generate_button = button.Button(
+            (50, 270), (300, 40), "Generate QR", self.generate_qr, []
+        )
+        self.save_button = button.Button(
+            (50, 330), (300, 40), "Save QR", self.save_qr, []
+        )
+        self.clear_button = button.Button(
+            (50, 390), (300, 40), "Clear QR", self.clear_qr, []
+        )
 
     def generate_qr(self):
         text_data = self.text_area.data_return()
@@ -73,15 +83,24 @@ class QRCodeApp:
         if text:
             self.img = self.qr_generator.generate(text)
             if self.img:
-                self.img_surface = pygame.image.frombuffer(self.img.tobytes(), self.img.size, self.img.mode)
-                self.img_surface = pygame.transform.scale(self.img_surface,(min(self.width // 2 - 100, self.img.size[0]), min(self.height - 100, self.img.size[1])))
-
+                self.img_surface = pygame.image.frombuffer(
+                    self.img.tobytes(), self.img.size, self.img.mode
+                )
+                self.img_surface = pygame.transform.scale(
+                    self.img_surface,
+                    (
+                        min(self.width // 2 - 100, self.img.size[0]),
+                        min(self.height - 100, self.img.size[1]),
+                    ),
+                )
 
     def save_qr(self):
         text_data = self.text_area.data_return()
         text = "".join(text_data)
         if self.img is not None and text:
-            filename = text.replace("/", "_").replace("\\", "_").replace(":", "_") + ".png"
+            filename = (
+                text.replace("/", "_").replace("\\", "_").replace(":", "_") + ".png"
+            )
             filename = filename[:50]
             self.qr_saver.save(self.img, filename)
 
@@ -114,6 +133,7 @@ class QRCodeApp:
             pygame.display.update()
 
         pygame.quit()
+
 
 if __name__ == "__main__":
     app = QRCodeApp(1280, 720)

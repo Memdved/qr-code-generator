@@ -68,7 +68,8 @@ class QRCodeApp:
         self.clear_button = button.Button((50, 390), (300, 40), "Clear QR", self.clear_qr, [])
 
     def generate_qr(self):
-        text = self.text_area.data_return()
+        text_data = self.text_area.data_return()
+        text = "".join(text_data)
         if text:
             self.img = self.qr_generator.generate(text)
             if self.img:
@@ -78,8 +79,9 @@ class QRCodeApp:
 
     def save_qr(self):
         text_data = self.text_area.data_return()
-        if self.img is not None and text_data:
-            filename = "".join(text_data).replace("/", "_").replace("\\", "_").replace(":", "_") + ".png"
+        text = "".join(text_data)
+        if self.img is not None and text:
+            filename = text.replace("/", "_").replace("\\", "_").replace(":", "_") + ".png"
             filename = filename[:50]
             self.qr_saver.save(self.img, filename)
 

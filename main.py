@@ -66,15 +66,15 @@ class QRCodeApp:
         self.init_ui()
 
     def init_ui(self):
-        self.text_area = textarea.TextArea((50, 50), (300, 200), 20, 1000)
+        self.text_area = textarea.TextArea((50, 50), (1180, 40), 20, 120)
         self.generate_button = button.Button(
-            (50, 270), (300, 40), "Generate QR", self.generate_qr, []
+            (50, 170), (320, 80), "Generate QR", self.generate_qr, []
         )
         self.save_button = button.Button(
-            (50, 330), (300, 40), "Save QR", self.save_qr, []
+            (50, 265), (320, 60), "Save QR", self.save_qr, []
         )
         self.clear_button = button.Button(
-            (50, 390), (300, 40), "Clear QR", self.clear_qr, []
+            (50, 340), (320, 60), "Clear QR", self.clear_qr, []
         )
 
     def generate_qr(self):
@@ -127,7 +127,7 @@ class QRCodeApp:
 
             if self.img is not None:
                 qr_x = self.width // 2 + 50
-                qr_y = 50
+                qr_y = 95
                 self.screen.blit(self.img_surface, (qr_x, qr_y))
 
             pygame.display.update()
